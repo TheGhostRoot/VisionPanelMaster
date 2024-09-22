@@ -16,7 +16,11 @@
                     fileName.EndsWith(".mp3") || fileName.EndsWith(".png") || 
                     fileName.EndsWith(".jpeg") || fileName.EndsWith(".jpg") || 
                     fileName.EndsWith(".ogg") || fileName.EndsWith(".mov")) {
-                    filePaths.Add(Path.Combine(relativePath, fileName).Replace("\\", "/"));
+                    string path = Path.Combine(relativePath, fileName).Replace("\\", "/");
+                    if (!filePaths.Contains(path)) {
+                        filePaths.Add(path);
+                    }
+                    
                 }
                 
             }

@@ -1,9 +1,8 @@
 
 namespace Main;
 
-using Microsoft.AspNetCore;
-using Microsoft.Extensions.FileProviders;
 using VisionPanelMaster.Routes.Auth;
+using VisionPanelMaster.Routes.ToS;
 
 class Program {
     public static WebApplication app;
@@ -15,8 +14,9 @@ class Program {
         app = builder.Build();
         WebRoot = app.Configuration.GetValue("root_folder", "/Web");
 
-        LoginRoute.RegisterPaths();
-        RegisterRoute.RegisterPaths();
+        LoginRoute.RegisterPaths(app, WebRoot + "/Auth/Login");
+        RegisterRoute.RegisterPaths(app, WebRoot + "/Auth/Login");
+        ToSRoute.RegisterPaths(app, WebRoot + "/ToS");
 
 
         app.Run();

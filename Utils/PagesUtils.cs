@@ -20,13 +20,33 @@ namespace VisionPanelMaster.Utils {
             return body;
         }
 
+        public static string LoadPage(string path) { 
+            try {
+                return File.ReadAllText(path);
+            } catch (Exception e) {
+                try {
+                    return File.ReadAllText(Program.WebRoot+"/Error/ErrorIndex.html");
+                } catch (Exception ex) {
+                    return @"
+                        <html>
+                          <head></head>
+                            <body>
+                         <h1>Can't load main page and error page</h1>
+                            </body>
+                        </html>";
+                }
+            }
+        }
 
-        public static void RegisterPageAssets(WebApplication app, string webrootPath, string endpointRoot, string mainIndexPath) {
-            endpointRoot = endpointRoot == "/" ? "" : endpointRoot;
-            app.MapGet(endpointRoot, async (HttpContext context) => 
-            await context.Response.SendFileAsync(mainIndexPath));
+
+        public static void RegisterPageAssets(WebApplication app, string webrootPath, 
+            string endpointRoot, string mainIndexPath) {
+
+            app.MapGet(endpointRoot, async (HttpContext context) =>
+            await context.Response.WriteAsync(LoadPage(mainIndexPath))); 
+
             foreach (string path in GeneralUtils.GetFilesWithPaths(webrootPath)) {
-                app.MapGet(endpointRoot + "/" + path, 
+                app.MapGet(endpointRoot + "/"+path, 
                     async (HttpContext context) =>
                 await context.Response.SendFileAsync(webrootPath + "/" + path));
             }

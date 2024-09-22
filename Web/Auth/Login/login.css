@@ -29,7 +29,7 @@ body {
 .wrapper {
   position: relative;
   width: 400px;
-  height: 500px;
+  height: 450px;
   background: #46588f00;
   filter: blur(0px);
   box-shadow: 0 0 100px rgb(0, 0, 0);
@@ -43,7 +43,7 @@ body {
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 100%;
+  height: 110%;
   transition: 1s ease-in-out;
 }
 
@@ -137,10 +137,16 @@ button {
   font-size: 14px;
   text-align: center;
   margin: 15px 0;
+  color: white;
 }
 
-.signUp-link p {
-  color: #fff;
+.signUp-link p .edno {
+  padding-bottom: -25px;
+  padding-top: 10px;
+}
+.signUp-link p .dve {
+  padding-bottom: 35px;
+  padding-top: 10px;
 }
 
 .signUp-link p a {
@@ -151,4 +157,8 @@ button {
 
 .signUp-link p a:hover {
   text-decoration: underline;
+}
+.terms {
+  color: rgb(48, 191, 252);
+  text-decoration: none;
 }

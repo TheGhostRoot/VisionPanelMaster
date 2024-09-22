@@ -1,20 +1,14 @@
 ﻿
 using Main;
+using VisionPanelMaster.Utils;
 
 namespace VisionPanelMaster.Routes.Auth {
     public class RegisterRoute {
-        private static WebApplication app = Program.app;
-
-        private static string WebLoginRoot = Program.WebRoot + "/Auth/Register";
-
-        public static void RegisterPaths() {
-            app.MapGet("/register", (HttpContext context) => Register(context));
+        public static void RegisterPaths(WebApplication app, string WebLoginRoot) {
+            PagesUtils.RegisterPageAssets(app, WebLoginRoot, "/register", 
+                WebLoginRoot + "/RegisterIndex.html");
         }
 
-        public static IResult Register(HttpContext context) {
-            return Results.Content(File.ReadAllText(WebLoginRoot + "/RegisterIndex.html"),
-                Program.PageContentType);
-        }
 
     }
 }
