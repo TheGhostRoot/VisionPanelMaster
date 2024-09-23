@@ -16,7 +16,6 @@ class Program {
         WebRoot = app.Configuration.GetValue("root_folder", "/Web");
 
         LoginRoute.RegisterPaths(app, WebRoot + "/Auth/Login");
-        RegisterRoute.RegisterPaths(app, WebRoot + "/Auth/Login");
         ToSRoute.RegisterPaths(app, WebRoot + "/ToS");
         ErrorRoute.RegisterPaths(app, WebRoot + "/Error");
 
