@@ -2,6 +2,7 @@
 namespace Main;
 
 using VisionPanelMaster.Routes.Auth;
+using VisionPanelMaster.Routes.Error;
 using VisionPanelMaster.Routes.ToS;
 
 class Program {
@@ -17,6 +18,7 @@ class Program {
         LoginRoute.RegisterPaths(app, WebRoot + "/Auth/Login");
         RegisterRoute.RegisterPaths(app, WebRoot + "/Auth/Login");
         ToSRoute.RegisterPaths(app, WebRoot + "/ToS");
+        ErrorRoute.RegisterPaths(app, WebRoot + "/Error");
 
 
         app.Run();
