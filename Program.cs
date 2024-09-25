@@ -18,6 +18,7 @@ class Program {
         LoginRoute.RegisterPaths(app, WebRoot + "/Auth/Login");
         ToSRoute.RegisterPaths(app, WebRoot + "/ToS");
         ErrorRoute.RegisterPaths(app, WebRoot + "/Error");
+        VerifyEmailRoute.RegisterPaths(app, WebRoot + "/Auth/VerifyEmail");
 
 
         app.Run();

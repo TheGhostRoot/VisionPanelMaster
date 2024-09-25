@@ -2,6 +2,7 @@
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Web;
 
 namespace VisionPanelMaster.Utils {
     public class PagesUtils {
@@ -24,24 +25,13 @@ namespace VisionPanelMaster.Utils {
             try {
                 return File.ReadAllText(path);
             } catch (Exception e) {
-                try {
-                    return File.ReadAllText(Program.WebRoot+"/Error/ErrorIndex.html");
-                } catch (Exception ex) {
-                    return @"
-                        <html>
-                          <head></head>
-                            <body>
-                         <h1>Can't load main page and error page</h1>
-                            </body>
-                        </html>";
-                }
+                return "<script type=\"text/javascript\">\r\n      window.location.href = \"/error\";\r\n   </script>";
             }
         }
 
 
         public static void RegisterPageAssets(WebApplication app, string webrootPath, 
             string endpointRoot, string mainIndexPath) {
-
             app.MapGet(endpointRoot, async (HttpContext context) =>
             await context.Response.WriteAsync(LoadPage(mainIndexPath))); 
 

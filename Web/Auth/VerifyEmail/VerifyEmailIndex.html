@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VisionPanel - Verify Email</title>
+    <link rel="stylesheet" type="text/css" href="/verify_email/email.css" />
+</head>
+
+<body>
+    <div class="welcome-message">
+        <h1>Vision Panel</h1>
+    </div>
+    <div class="verify-body">
+
+        <h1>Verify Email</h1>
+        <h3>Enter your email related to your account</h3>
+
+        <form action="/verify_email" method="POST">
+            <input type="email" id="user_email" name="user_email" placeholder="   example@gmail.com" required>
+            <button type="submit">Send Code</button>
+        </form>
+
+
+        <form action="/verify_email" method="PATCH">
+            <input type="text" id="email_code" name="email_code" placeholder="   ABC" required>
+            <button type="submit">Verify</button>
+        </form>
+
+    </div>
+
+    <script src="/verify_email/email.js"></script>
+</body>
+</html>

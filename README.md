@@ -20,6 +20,7 @@ matter if it is modified or not.
 - By default webpages names:
 ```
 Login: /Auth/Login
+Verify Email: /Auth/VerifyEmail
 Error: /Error
 Terms Of Service: /ToS
 ```
@@ -31,12 +32,14 @@ Terms Of Service: /ToS
 - Here is a list of all endpoints seperated by `;`:
 ```
 Login: / ; /login
+Verify Email: /verify_email
 Error: /error
 Terms Of Service: /tos
 ```
 - Here is a list of their file locations:
 ```
-Login: /Auth
-Error: /Error
-Terms Of Service: /ToS
+Login: /Auth/LoginRoute.cs
+Verify Email: /Auth/VerifyEmail.cs
+Error: /Error/ErrorRoute.cs
+Terms Of Service: /ToS/ToSRoute.cs
 ```
