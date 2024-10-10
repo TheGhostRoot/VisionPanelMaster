@@ -5,6 +5,10 @@
     display: none;
 }
 
+.verify-body h1 {
+    color: white;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -21,6 +25,10 @@ body {
   background-image: url(pic1.png);
   background-repeat: no-repeat;
   background-size: cover;
+}
+
+a {
+  color: rgb(104, 187, 255);
 }
 
 .welcome-message {
@@ -45,41 +53,45 @@ body {
     overflow: hidden;
 }
 
-h3 {
-    margin-top: 40px;
-}
-
-#email_code {
-    border-radius: 5px;
-    border-color: black;
-    border-style: solid;
-    margin-left: 20px;
-    margin-right: 20px;
-    font-size: 20px;
-    margin-top: 40px;
-    margin-bottom: 40px;
+.verify-body h3 {
     color: white;
-    background-color: black;
-}
-
-#user_email {
-    border-radius: 5px;
-    border-color: black;
-    border-style: solid;
-    margin-left: 20px;
-    margin-right: 20px;
-    font-size: 20px;
     margin-top: 40px;
-    margin-bottom: 40px;
-    color: white;
-    background-color: black;
 }
 
-textarea:focus, input:focus {
-    outline-style: solid;
-    outline-offset: 3px;
-    outline-color: dimgrey;
+
+
+.input-group {
+    position: relative;
+    margin: 30px 0;
+    border-bottom: 2px solid #fff;
 }
+
+    .input-group label {
+        position: absolute;
+        top: 50%;
+        left: 5px;
+        transform: translateY(-50%);
+        font-size: 16px;
+        color: #fff;
+        pointer-events: none;
+        transition: 0.5s;
+    }
+
+    .input-group input {
+        width: 320px;
+        height: 40px;
+        font-size: 16px;
+        color: #fff;
+        padding: 0 5px;
+        background: transparent;
+        border: none;
+        outline: none;
+    }
+
+        .input-group input:focus ~ label,
+        .input-group input:valid ~ label {
+            top: -5px;
+        }
 
 button[type=submit] {
     position: relative;

@@ -6,6 +6,9 @@ namespace VisionPanelMaster.Routes.Auth {
             PagesUtils.RegisterPageAssets(app, WebLoginRoot, 
                 "/verify_email", WebLoginRoot + "/VerifyEmailIndex.html");
 
+            PagesUtils.RegisterPageAssets(app, WebLoginRoot,
+                "/verify_email_code", WebLoginRoot + "/VerifyEmailIndex.html");
+
         }
     }
 }

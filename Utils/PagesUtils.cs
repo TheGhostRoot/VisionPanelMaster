@@ -1,8 +1,5 @@
-﻿using Main;
-using System.IO;
-using System.Runtime.CompilerServices;
+﻿
 using System.Text;
-using System.Web;
 
 namespace VisionPanelMaster.Utils {
     public class PagesUtils {
@@ -33,7 +30,7 @@ namespace VisionPanelMaster.Utils {
         public static void RegisterPageAssets(WebApplication app, string webrootPath, 
             string endpointRoot, string mainIndexPath) {
             app.MapGet(endpointRoot, async (HttpContext context) =>
-            await context.Response.WriteAsync(LoadPage(mainIndexPath))); 
+            await context.Response.WriteAsync(LoadPage(mainIndexPath)));
 
             foreach (string path in GeneralUtils.GetFilesWithPaths(webrootPath)) {
                 app.MapGet(endpointRoot + "/"+path, 
