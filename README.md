@@ -102,4 +102,7 @@ status_of_success BOOLEAN whether the activity was done or not. There is no pend
 - The communication between the master and agent is with AES encrypted JWT tokens.
 - The master and the agent will have the keys for encryption and JWT verification.
 - File: `StartupSql.sql` is the sql that will be executed every time the master server starts up. The path of it is in the `appsettings.json`.
-- 
+- `Gmail_App_Password_For_Panel_Email` can be empty if you don't use Gmail.
+- `Panel_Email` the email the panel will use to send messages to notify teh users.
+- `Email_Smtp_Server` by default is `"smtp.gmail.com:587"` , 
+   but you can change it if you want to use other services. Format: "Address:Port"
