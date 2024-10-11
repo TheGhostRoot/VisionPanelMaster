@@ -96,6 +96,13 @@ activity text describing what the user tried to do
 status_of_success BOOLEAN whether the activity was done or not. There is no pending!
 ```
 
+- Table VerifyEmail
+```
+code int 4 bytes UNIQUE not null
+datetime the date and time of the email send default is NOW()
+email UNIQUE TEXT to variable length NOT NULL
+```
+
 # Note: 
 - The connection string in `appsettings.json` is already configured, but you need to create a database called `VisionPanelMaster`.
 - The whole idea of this backend is master-agent. The agents will obay the master and send information to the master, so the master can update the information and save it for the users.
@@ -106,3 +113,9 @@ status_of_success BOOLEAN whether the activity was done or not. There is no pend
 - `Panel_Email` the email the panel will use to send messages to notify teh users.
 - `Email_Smtp_Server` by default is `"smtp.gmail.com:587"` , 
    but you can change it if you want to use other services. Format: "Address:Port"
+
+- `Verify_Email_File_Path` -> This is the path of the file that will be used as a template for sending custom emails.    
+  For this example the email is about verifing your email. The name of the file will be the subject and the context of it will be the body of the email sent.
+  KEEP IN MIND!!!! This HTML has `/verify_code/` tag that will diplay the numbers to be verified.  
+
+- As of `Verify_Email_File_Path` the rest of the emails work the same way.

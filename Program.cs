@@ -21,8 +21,8 @@ class Program {
     public static HashAlgorithm sha = SHA256.Create();
     public static Random random = new Random();
 
-    private static DatabaseMain? databaseMain;
-    private static UtilManager? utilManager;
+    public static DatabaseMain? databaseMain;
+    public static UtilManager? utilManager;
 
     public static void Main(string[] args) {
         var builder = WebApplication.CreateBuilder(args);
@@ -84,7 +84,10 @@ class Program {
             smtp.UseDefaultCredentials = false;
             smtp.EnableSsl = true;
             utilManager = new UtilManager(app, smtp);
+
+            utilManager.generalUtils.sendEmailToVerifyCode("kriskata50@gmail.com");
         } catch (Exception ex) {
+            Console.WriteLine(ex.ToString());
             throw new Exception("You need SMTP Server configured");
         }
     }
@@ -121,6 +124,12 @@ CREATE TABLE IF NOT EXISTS UserLogs (
     datetime TIMESTAMP NOT NULL DEFAULT NOW(),
     activity TEXT NOT NULL,
     status_of_success BOOLEAN NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS VerifyEmail (
+    code INTEGER PRIMARY KEY NOT NULL,
+    datetime TIMESTAMP NOT NULL DEFAULT NOW(),
+    email TEXT UNIQUE NOT NULL
 );
 
 ";

@@ -68,10 +68,38 @@ namespace VisionPanelMaster.Utils {
         }
 
         public void sendEmailToVerifyCode(string email) {
+            if (Program.utilManager == null) {
+                throw new Exception("Program.utilManager is null");
+            }
             string code = Program.random.Next(99999, 10000000).ToString();
-            MailMessage emailMsg = new MailMessage(panel_email, email, 
-                "aaaa", 
-                "Hello");
+
+            string subject;
+            string body;
+
+            try {
+                string configPath = Program.utilManager.GetValue("Verify_Email_File_Path");
+                if (configPath == null || !configPath.EndsWith(".html")) {
+                    throw new Exception("Invalid email template");
+                }
+                string emailPath;
+                if (configPath.Contains("\\")) {
+                    emailPath = configPath.Split("\\").Last();
+
+                } else if (configPath.Contains("/")) {
+                    emailPath = configPath.Split("/").Last();
+
+                } else {
+                    emailPath = configPath;
+                }
+                subject = emailPath.Remove(emailPath.Length - 5, 5);
+                body = File.ReadAllText(configPath).Replace("/verify_code/", code);
+            } catch (Exception e) {
+                throw new Exception("Can't get Verify_Email_File_Path to work. "+e.Message);
+            }
+
+            MailMessage emailMsg = new MailMessage(panel_email, email,
+                subject, 
+                body);
             emailMsg.IsBodyHtml = true;
 
             smtp.Send(emailMsg);

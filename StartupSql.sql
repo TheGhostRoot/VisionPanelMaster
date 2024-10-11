@@ -29,3 +29,9 @@ CREATE TABLE IF NOT EXISTS UserLogs (
     activity TEXT NOT NULL,
     status_of_success BOOLEAN NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS VerifyEmail (
+    code INTEGER PRIMARY KEY NOT NULL,
+    datetime TIMESTAMP NOT NULL DEFAULT NOW(),
+    email TEXT UNIQUE NOT NULL
+);
