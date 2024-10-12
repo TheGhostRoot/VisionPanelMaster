@@ -1,15 +1,27 @@
-﻿namespace VisionPanelMaster.Database {
+﻿using Npgsql;
+
+namespace VisionPanelMaster.Database {
     public class DatabaseMain {
-        public DatabaseManager databaseManager {
-            get;
-        }
+
+        public string ConnectionString { get; }
 
         public AuthDatabase authDatabase {
             get;
         }
+
+        public EmailDatabase emailDatabase {
+            get;
+        }
+
+
         public DatabaseMain(WebApplication app) {
-            databaseManager = new DatabaseManager(app);
-            authDatabase = new AuthDatabase(databaseManager);
+            ConnectionString = app.Configuration.GetValue<string>("Connection_Strings") ??
+                throw new Exception("No connection string");
+
+            new ConnectionManager(ConnectionString).CheckConnection();
+            
+            authDatabase = new AuthDatabase();
+            emailDatabase = new EmailDatabase();
         }
     }
 }

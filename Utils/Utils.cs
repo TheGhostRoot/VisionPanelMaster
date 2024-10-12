@@ -1,6 +1,9 @@
 ﻿using Microsoft.Extensions.Hosting;
+using Npgsql;
+using NpgsqlTypes;
 using System.Net;
 using System.Net.Mail;
+using VisionPanelMaster.Database;
 
 namespace VisionPanelMaster.Utils {
     public class Utils {
@@ -71,7 +74,6 @@ namespace VisionPanelMaster.Utils {
             if (Program.utilManager == null) {
                 throw new Exception("Program.utilManager is null");
             }
-            string code = Program.random.Next(99999, 10000000).ToString();
 
             string subject;
             string body;
@@ -92,18 +94,35 @@ namespace VisionPanelMaster.Utils {
                     emailPath = configPath;
                 }
                 subject = emailPath.Remove(emailPath.Length - 5, 5);
-                body = File.ReadAllText(configPath).Replace("/verify_code/", code);
+                body = File.ReadAllText(configPath);
             } catch (Exception e) {
                 throw new Exception("Can't get Verify_Email_File_Path to work. "+e.Message);
             }
 
+
+            List<int> codes = Program.databaseMain.emailDatabase.GetAllCodes(
+                      new ConnectionManager(Program.databaseMain.ConnectionString));
+
+            int code = Program.random.Next(99999, 10000000);
+
+            while (codes.Contains(code)) {
+                code = Program.random.Next(99999, 10000000);
+            }
+
+            body = body.Replace("/verify_code/", code.ToString());
             MailMessage emailMsg = new MailMessage(panel_email, email,
-                subject, 
-                body);
+                subject, body);
             emailMsg.IsBodyHtml = true;
 
-            smtp.Send(emailMsg);
 
+            try {
+                smtp.Send(emailMsg);
+                Program.databaseMain.emailDatabase.AddVerifyCode(
+                    new ConnectionManager(Program.databaseMain.ConnectionString), 
+                    code, email);
+            } catch (SmtpException e) {
+                throw new Exception("Can't send email");
+            }
         }
     }
 }

@@ -1,15 +1,19 @@
 ﻿using Npgsql;
 
 namespace VisionPanelMaster.Database {
-    public class DatabaseManager : IDisposable {
+    public class ConnectionManager : IDisposable {
         private readonly string _connectionString;
         private NpgsqlConnection? _connection;
 
-        public DatabaseManager(WebApplication app) {
-            _connectionString = app.Configuration.GetValue<string>("Connection_Strings")
-                ?? throw new ArgumentNullException(nameof(app), "`Connection_Strings` is not configured.");
+        public ConnectionManager(string connection_string) {
+            _connectionString = connection_string;
         }
 
+        public async void CheckConnection() {
+            if (await GetConnectionAsync() == null) {
+                throw new Exception("Connection Invalid");
+            }
+        }
         private async Task<NpgsqlConnection> GetConnectionAsync() {
             if (_connection == null || _connection.State != System.Data.ConnectionState.Open) {
                 _connection = new NpgsqlConnection(_connectionString);
@@ -33,6 +37,7 @@ namespace VisionPanelMaster.Database {
             while (await reader.ReadAsync()) {
                 func(reader);
             }
+            reader.Close();
         }
 
         public async Task<int> ExecuteNonQueryAsync(NpgsqlCommand cmd) {

@@ -103,10 +103,35 @@ datetime the date and time of the email send default is NOW()
 email UNIQUE TEXT to variable length NOT NULL
 ```
 
+# Change Password with Verify Email System (Explained)
+```
+User enters email and clicks a button to send the verification code to that email. 
+The button sends POST request to `/verify_email` and the server first generates a unique
+code by running a sql to get all the code that exists and generates a one that doesn't exsists.
+Then trys to send an email contain the generated code and if the email has been sent successfully then
+the server puts that code with datetime and email in the database in table `VerifyEmail`.
+By default the code expires after 5 minutes and here is how it works: 
+There is a background thread that runs a `while (true)` loop (infinite) and in this loop
+the thread first deletes any rows from table `VerifyEmail` that has expired based on `datetime` column
+and waits for 86400000 mils (24 hours) and then deletes it again.
+
+Then the user checks their email and enters the code and clicks the button to verify the code.
+This sends POST request to `/verify_email_code` with the code and email given and 
+the user will be rederected to the change password page where they will need to say what will their new 
+password be.
+
+
+Note: The user won't be able to change their email, but the system is made is a way that 
+if you want to change your email you need another account. This is done simply for avoiding useless
+complexity for getting your account back from a hacker and to save nerves and anger.
+```
+
+
 # Note: 
 - The connection string in `appsettings.json` is already configured, but you need to create a database called `VisionPanelMaster`.
 - The whole idea of this backend is master-agent. The agents will obay the master and send information to the master, so the master can update the information and save it for the users.
 - The communication between the master and agent is with AES encrypted JWT tokens.
+- The code uses connection pool so keep `Pooling=true;MinPoolSize=10;MaxPoolSize=100;ConnectionLifeTime=15;` in the connection string.
 - The master and the agent will have the keys for encryption and JWT verification.
 - File: `StartupSql.sql` is the sql that will be executed every time the master server starts up. The path of it is in the `appsettings.json`.
 - `Gmail_App_Password_For_Panel_Email` can be empty if you don't use Gmail.

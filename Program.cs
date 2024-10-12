@@ -1,12 +1,8 @@
 
 namespace VisionPanelMaster;
 
-using Npgsql;
-using Npgsql.PostgresTypes;
-using NpgsqlTypes;
 using System.Net;
 using System.Net.Mail;
-using System.Runtime.Intrinsics.Arm;
 using System.Security.Cryptography;
 using VisionPanelMaster.Database;
 using VisionPanelMaster.Routes.Auth;
@@ -21,8 +17,12 @@ class Program {
     public static HashAlgorithm sha = SHA256.Create();
     public static Random random = new Random();
 
-    public static DatabaseMain? databaseMain;
-    public static UtilManager? utilManager;
+    public static DatabaseMain databaseMain {
+        get; set;
+    }
+    public static UtilManager utilManager {
+        get; set;
+    }
 
     public static void Main(string[] args) {
         var builder = WebApplication.CreateBuilder(args);
@@ -30,14 +30,13 @@ class Program {
 
         WebRoot = app.Configuration.GetValue<string>("Web_Root_Folder") ?? "";
 
-        AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
-
         SetupSMTP(app);
         SetupDatabase(app);
 
+        AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
 
 
-      
+
 
 
         /*
@@ -59,13 +58,12 @@ class Program {
         ErrorRoute.RegisterPaths(app, WebRoot + "/Error");
         VerifyEmailRoute.RegisterPaths(app, WebRoot + "/Auth/VerifyEmail");
 
-
         app.Run();
    }
 
 
     private static void OnProcessExit(object? sender, EventArgs e) {
-        databaseMain?.databaseManager.Dispose();
+        utilManager.smtp.Dispose();
     }
 
     private static void SetupSMTP(WebApplication app) {
@@ -83,11 +81,8 @@ class Program {
             smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
             smtp.UseDefaultCredentials = false;
             smtp.EnableSsl = true;
-            utilManager = new UtilManager(app, smtp);
-
-            utilManager.generalUtils.sendEmailToVerifyCode("kriskata50@gmail.com");
+            Program.utilManager = new UtilManager(app, smtp);
         } catch (Exception ex) {
-            Console.WriteLine(ex.ToString());
             throw new Exception("You need SMTP Server configured");
         }
     }
@@ -128,21 +123,23 @@ CREATE TABLE IF NOT EXISTS UserLogs (
 
 CREATE TABLE IF NOT EXISTS VerifyEmail (
     code INTEGER PRIMARY KEY NOT NULL,
-    datetime TIMESTAMP NOT NULL DEFAULT NOW(),
+    datetime TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
     email TEXT UNIQUE NOT NULL
 );
 
 ";
-        databaseMain = new DatabaseMain(app);
+
+
+        Program.databaseMain = new DatabaseMain(app);
+
         try {
             sql = File.ReadAllText(app.Configuration.GetValue<string>("Startup_SQL_File_Path")
             ?? throw new Exception("`Startup_SQL_File_Path` is not configured."));
         } catch (Exception e) {
             Console.WriteLine("Error while reading the startup sql: " + e.Message);
-            return;
         }
 
-        databaseMain.databaseManager.ExecuteNonQueryAsync(
-            databaseMain.databaseManager.BuildCommand(sql, null)).Wait();
+        ConnectionManager connection = new ConnectionManager(Program.databaseMain.ConnectionString);
+        connection.ExecuteNonQueryAsync(connection.BuildCommand(sql, null)).Wait();
     }
 }

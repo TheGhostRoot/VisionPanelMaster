@@ -6,9 +6,13 @@ namespace VisionPanelMaster.Utils {
         private WebApplication app;
 
         public Utils generalUtils;
+        public SmtpClient smtp {
+            get; set;
+        }
 
         public UtilManager(WebApplication app, SmtpClient smtp) { 
             this.app = app;
+            this.smtp = smtp;
             generalUtils = new Utils(smtp, GetValue("Panel_Email") ?? throw new Exception());
         }
 

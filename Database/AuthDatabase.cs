@@ -4,10 +4,7 @@ using System.Text;
 
 namespace VisionPanelMaster.Database {
     public class AuthDatabase {
-
-        private readonly DatabaseManager databaseManager;
-        public AuthDatabase(DatabaseManager givenDatabaseManager) {
-            databaseManager = givenDatabaseManager;
+        public AuthDatabase() {
         }
 
 
@@ -26,16 +23,19 @@ namespace VisionPanelMaster.Database {
             args.Add(emailArg);
             args.Add(passwordArg);
 
-            databaseManager.ExecuteReaderAsync(
-                databaseManager.BuildCommand(@"SELECT exists 
-(SELECT 1 as Login FROM Users WHERE email = @Email AND password = @Password LIMIT 1);", args), 
+            ConnectionManager connection = new ConnectionManager(Program.databaseMain.ConnectionString);
+
+            connection.ExecuteReaderAsync(
+                connection.BuildCommand(@"SELECT exists 
+(SELECT 1 as Login FROM Users WHERE email = @Email AND password = @Password LIMIT 1);", args),
                 (NpgsqlDataReader reader) => {
-                    if (bool.Parse(reader.GetValue(0)?.ToString())) {
-                        throw new Exception("Success");
-                    } else {
+                    if (!bool.Parse(reader.GetValue(0)?.ToString())) {
                         throw new Exception("Invalid login email and password");
+                    } else {
+                        return;
                     }
                 });
+            
         }
 
 
@@ -59,9 +59,12 @@ namespace VisionPanelMaster.Database {
             args.Add(emailArg);
             args.Add(passwordArg);
 
-            int effected_rows = await databaseManager.ExecuteNonQueryAsync(
-                databaseManager.BuildCommand(@"INSERT INTO Users (username,email,password) 
+            ConnectionManager connection = new ConnectionManager(Program.databaseMain.ConnectionString);
+
+            int effected_rows = await connection.ExecuteNonQueryAsync(
+                connection.BuildCommand(@"INSERT INTO Users (username,email,password) 
 VALUES (@Username, @Email, @Password);", args));
+
 
             if (effected_rows == 0) {
                 throw new Exception("Ether the username exists, the email exists or you have given too long inputs.");
