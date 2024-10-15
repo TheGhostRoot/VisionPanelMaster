@@ -24,7 +24,8 @@ namespace VisionPanelMaster.Utils {
             return filePaths;
         }
 
-        private void GetFilesRecursive(string currentFolderPath, string relativePath, List<string> filePaths) {
+        private void GetFilesRecursive(string currentFolderPath, 
+            string relativePath, List<string> filePaths) {
             string[] files = Directory.GetFiles(currentFolderPath);
             foreach (string file in files) {
                 string fileName = Path.GetFileName(file);

@@ -14,18 +14,18 @@
     </div>
     <div class="wrapper">
       <div class="form-wrapper sign-in">
-        <form action="">
+        <form action="/login" method="post">
           <h2>Login</h2>
           <div class="input-group">
-            <input type="text" required />
-            <label for="">Email</label>
+            <input type="text" name="email" required />
+            <label>Email</label>
           </div>
           <div class="input-group">
-            <input type="password" required />
-            <label for="">Password</label>
+            <input type="password" name="password" required />
+            <label>Password</label>
           </div>
           <div class="remember">
-            <label><input type="checkbox" /> Remember me</label>
+            <label><input type="checkbox" name="remember_me"/> Remember me</label>
           </div>
           <button type="submit">Login</button>
           <div class="signUp-link edno">
@@ -45,15 +45,15 @@
           <h2>Sign Up</h2>
           <div class="input-group">
             <input type="text" max="30" required />
-            <label for="">Username</label>
+            <label >Username</label>
           </div>
           <div class="input-group">
             <input type="email" required />
-            <label for="">Email</label>
+            <label >Email</label>
           </div>
           <div class="input-group">
             <input type="password" required />
-            <label for="">Password</label>
+            <label >Password</label>
           </div>
           <div class="remember">
             <label

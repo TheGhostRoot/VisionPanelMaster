@@ -12,7 +12,6 @@ using VisionPanelMaster.Utils;
 
 class Program {
     public static string WebRoot = "";
-    public readonly static string PageContentType = "text/html";
 
     public static HashAlgorithm sha = SHA256.Create();
     public static Random random = new Random();
@@ -26,7 +25,22 @@ class Program {
 
     public static void Main(string[] args) {
         var builder = WebApplication.CreateBuilder(args);
+
+        builder.Services.AddDistributedMemoryCache();
+        builder.Services.AddSession(options =>
+        {
+            options.Cookie.Name = ".VisionPanel.Session";
+            options.IdleTimeout = TimeSpan.FromMinutes(20);
+            options.Cookie.HttpOnly = true;
+            options.Cookie.IsEssential = true;
+            options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            options.Cookie.SameSite = SameSiteMode.Strict;
+        });
+
         WebApplication app = builder.Build();
+        app.UseHttpsRedirection();
+        app.UseSession();
+
 
         WebRoot = app.Configuration.GetValue<string>("Web_Root_Folder") ?? "";
 
@@ -35,7 +49,34 @@ class Program {
 
         AppDomain.CurrentDomain.ProcessExit += OnProcessExit;
 
+        app.Use(async (context, next) =>
+        {
+            context.Response.Headers.Append("Content-Security-Policy", "default-src 'self';");
+            context.Response.Headers.Append("X-Frame-Options", "DENY");
+            context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
+            context.Response.Headers.Append("Referrer-Policy", "strict-origin-when-cross-origin");
+            context.Response.Headers.Append("Content-Security-Policy", "default-src 'self'; frame-ancestors 'none';");
 
+            Console.WriteLine("Method: "+context.Request.Method +" " + 
+                context.Request.Host +" Path:"+ 
+                context.Request.Path + " ContentType:" + context.Request.ContentType);
+            await next();
+            Console.WriteLine($"Response: {context.Response.StatusCode}");
+        });
+
+
+        /*
+         * <head>
+         * <meta http-equiv="Content-Security-Policy" 
+      content="base-uri 'self';
+               default-src 'self';
+               img-src data: https:;
+               object-src 'none';
+               script-src 'self';
+               style-src 'self';
+               upgrade-insecure-requests;">
+         * </head>
+         */
 
 
 

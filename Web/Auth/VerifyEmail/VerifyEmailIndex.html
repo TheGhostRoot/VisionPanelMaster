@@ -1,46 +1,26 @@
-﻿<!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE html>
+<html lang="bg">
+  <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>VisionPanel - Verify Email</title>
-    <link rel="stylesheet" type="text/css" href="/verify_email/email.css" />
-</head>
-
-<body>
+    <title>Forgot Password</title>
+    <link rel="stylesheet" href="/verify_email/style.css" />
+  </head>
+  <body>
     <div class="welcome-message">
-        <h1>Vision Panel</h1>
+      <h1>Vision Panel</h1>
     </div>
-    <div class="verify-body">
-
-        <h1>Verify Email</h1>
-        <h3>Enter your email related to your account</h3>
-
-        <form action="/verify_email" method="POST">
-            <div class="input-group">
-            <label for="">Email</label>
-            <input type="email" id="user_email" name="user_email" 
-                    required>
-                </div>
-            <button type="submit">Send Code</button>
-        </form>
-
-
-        <form class="input-group" action="/verify_email_code" method="POST">
-            <div class="input-group">
-                <label for="">Code</label>
-                <input type="text" id="email_code" name="email_code" required>
-            </div>
-            <button type="submit">Verify</button>
-        </form>
-
-        <p>
-            <a href="/login">Login</a>
-        </p>
-
+    <div class="wrapper">
+      <div class="input-row">
+        <label for="email" class="email-label">Email:</label>
+        <input id="email" type="email" class="email" placeholder="The email of your account." />
+      </div>
+      <button type="submit" class="submit-btn">Submit</button>
+      <div class="input-row">
+        <label for="code" class="email-label">Code:</label>
+        <input id="code" type="text" class="email" placeholder="The code in your email." />
+      </div>
+      <button type="submit" class="submit-btn">Reset Password</button>
     </div>
-
-    <script src="/verify_email/email.js"></script>
-</body>
+  </body>
 </html>

@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Routes\Extentions\" />
+    <Folder Include="Web\Auth\ChangePassword\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
